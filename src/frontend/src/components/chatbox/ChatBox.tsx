@@ -1,5 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
+import MessageBox from "../messagebox/MessageBox";
 import "./chatbox.scss";
+import { v4 as uuidv4, v4 } from "uuid";
 
 interface ChatBoxProps {
 
@@ -14,24 +16,11 @@ interface Message {
     userId: string,
     userName : string,
     message : string,
-    datetime : string
+    dateTime : Date
 }
 
-const conversation : Conversation = {
+let conversation : Conversation = {
     messages : [
-        {
-            id : "0001",
-            userId : "0001",
-            userName : "Effendy Tham",
-            message : "Icyhot01, thank you so much",
-            datetime : "07:14 PM"
-        }, {
-            id : "0002",
-            userId : "0001",
-            userName : "Effendy Tham",
-            message : "Really appreciate it, you are very kind. Hello to Napal friend",
-            datetime : "07:15 PM"
-        }
     ]
 }
 
@@ -39,6 +28,26 @@ const ChatBox: FC<ChatBoxProps> = (props) => {
     const [groupName, setGroupName] = useState<string>("Foodies Group");
     const [groupId, setGroupId] = useState<string>("#HS34K");
     const [groupMemberCount, setGroupMemberCount] = useState<number>(49);
+    const [myUserId, setMyUserId] = useState<string>("0001");
+    const [inputText, setInputText] = useState<string>("");
+
+    const inputTextChangeHandler = (value: string) => {
+        setInputText(value);
+    }
+
+    const inputRef: any = useRef();
+
+    const handleSend = () => {
+        conversation.messages.push({
+            id : v4(),
+            userId : (Math.floor(Math.random() * 10) > 5) ? "0001" : "0002",
+            userName : "John Doe",
+            message : inputText,
+            dateTime : new Date()
+        });
+        setInputText("");
+        (inputRef.current as any).focus();
+    }
     return (
         <div className="chatbox-container">
             <div className="chatbox-header">
@@ -56,18 +65,29 @@ const ChatBox: FC<ChatBoxProps> = (props) => {
                 {
                     conversation.messages.map((message) => {
                         return (
-                            <div key={message.id} className="chatbox-conversation_message">
-                                <div className="chatbox-conversation_message_box">
-                                    <span className="chatbox-conversation_message_box_name">{message.userName}</span>
-                                    <span className="chatbox-conversation_message_box_message">{message.message}</span>
-                                </div>
-                                <span className="chatbox-conversation_message_time">
-                                    {message.datetime}
-                                </span>
-                            </div>
+                            <MessageBox
+                                key={message.id}
+                                mode={myUserId === message.userId ? "outgoing" : "incoming"}
+                                name={message.userName}
+                                message={message.message}
+                                dateTime={message.dateTime}
+                            />
                         )
                     })
                 }
+            </div>
+            <div className="chatbox-input_container">
+                <input type="text" value={inputText}
+                    onChange={(e) => inputTextChangeHandler(e.target.value)}
+                    className="chatbox-input"
+                    autoComplete="false"
+                    placeholder="Type your message..."
+                    ref={inputRef}
+                />
+                <button
+                    className="chatbox-send"
+                    onClick={(e) => handleSend()}
+                >Send</button>
             </div>
         </div>
     )
