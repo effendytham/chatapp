@@ -1,0 +1,82 @@
+$body-background_color : #E2E4F5;
+$header-background_color : #FFF;
+$default_padding : 1.5rem;
+
+
+.chatbox-container {
+    width : 100%;
+    height : 100%;
+    background-color : $body-background_color;
+}
+
+.chatbox-header {
+    width : 100%;
+    background-color : $header-background_color;
+    box-shadow : 1px 6px 6px 0px rgba(222,222,222,0.64);
+    padding : $default_padding;
+
+    &_title {
+
+        margin-bottom : 0.75rem;
+        &_name {
+            margin-right : 1.2rem;
+        }
+
+        &_id {
+            color : #666666;
+        }
+    }
+
+    &_action {
+        display : flex;
+        flex-direction: row;
+
+        &_item {
+            margin-right : 1.25rem;
+            background-color : transparent;
+            border : none;
+            color : lighten(#1452AF, 15%);
+            text-decoration: underline;
+            transition : color 0.2s;
+
+            &:hover {
+                cursor : pointer;
+                color : #1452AF;
+            }
+        }
+    }
+}
+
+
+.chatbox-conversation {
+    padding : $default_padding;
+
+    &_message {
+        display : flex;
+        flex-direction: row;
+        align-items: flex-end;
+        margin-bottom : 1rem;
+
+        &_box {
+            padding : 1rem 1.25rem;
+            background-color : #FFF;
+            
+            width : fit-content;
+            box-shadow: 1px 6px 6px 0px rgba(222,222,222,0.64);
+            display : flex;
+            flex-direction: column;
+            gap : 1rem;
+    
+            &_name {
+                color : #3A81D1;
+                font-weight: bold;
+            }
+        }
+
+        &_time {
+            color : lighten(#000, 40%);
+            margin-left : 1rem;
+        }
+    }
+
+}
